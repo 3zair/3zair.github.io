@@ -204,7 +204,8 @@
         
         
         <div class="post-content">
-            <p>Go语言追求简洁优雅，所以，Go语言不支持传统的 try…catch…finally 这种异常，因为Go语言的设计者们认为，将异常与控制结构混在一起会很容易使得代码变得混乱。因为开发者很容易滥用异常，甚至一个小小的错误都抛出一个异常。在Go语言中，使用多值返回来返回错误。不要用异常代替错误，更不要用来控制流程。在极个别的情况下，也就是说，遇到真正的异常的情况下（比如除数为0了）。才使用Go中引入的Exception处理：defer, panic, recover。</p>
+            <p>Go语言追求简洁优雅，所以，Go语言不支持传统的<code> try…catch…finally</code> 这种异常，因为Go语言的设计者们认为，将异常与控制结构混在一起会很容易使得代码变得混乱。因为开发者很容易滥用异常，甚至一个小小的错误都抛出一个异常。</p>
+<p>在Go语言中，使用多值返回来返回错误。不要用异常代替错误，更不要用来控制流程。在极个别的情况下，也就是说，遇到真正的异常的情况下（比如除数为0了）。才使用Go中引入的Exception处理：<code>defer</code>, <code>panic</code>, <code>recover</code>。</p>
 <p>这几个异常的使用场景可以这么简单描述：Go中可以抛出一个panic的异常，然后在defer中通过recover捕获这个异常，然后正常处理。</p>
 <p>例：</p>
 <pre tabindex="0"><code>package main
@@ -231,13 +232,26 @@ func f(){
 	fmt.Println(&#34;b&#34;)
 	fmt.Println(&#34;f&#34;)
 }
-</code></pre><p>结果：
-a
-c
-55
-d
-exit code 0, process exited normally.
-参考： <a href="http://blog.csdn.net/ghost911_slb/article/details/7831574">http://blog.csdn.net/ghost911_slb/article/details/7831574</a></p>
+</code></pre><p>结果：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>a
+</span></span><span style="display:flex;"><span>c
+</span></span><span style="display:flex;"><span><span style="color:#099">55</span>
+</span></span><span style="display:flex;"><span>d
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">exit</span> code 0, process exited normally.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>参考： <a href="http://blog.csdn.net/ghost911_slb/article/details/7831574">http://blog.csdn.net/ghost911_slb/article/details/7831574</a></p>
 <h3 id="defer">defer</h3>
 <p>defer的思想类似于C++中的析构函数，不过Go语言中“析构”的不是对象，而是函数，defer就是用来添加函数结束时执行的语句。注意这里强调的是添加，而不是指定，因为不同于C++中的析构函数是静态的，Go中的defer是动态的。</p>
 <pre tabindex="0"><code>func f() (result int) {
@@ -294,9 +308,9 @@ panic就是这么简单。抛出个真正意义上的异常。</p>
         
         <li><a href="/posts/git-%E5%85%A5%E9%97%A8/">Git常用命令</a></li>
         
-        <li><a href="/posts/redis/">Hello</a></li>
-        
         <li><a href="/posts/linux%E8%BE%BE%E4%BA%BA%E5%85%BB%E6%88%90/">Linux常用命令</a></li>
+        
+        <li><a href="/posts/ubuntu18.04%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">Ubuntu 18.04采坑</a></li>
         
     </ul>
 </div>
@@ -491,10 +505,6 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
     </li>
     
     <li>
-        <a href="https://3zair.github.io/posts/redis/" title="Hello" target="_blank">Hello</a>
-    </li>
-    
-    <li>
         <a href="https://3zair.github.io/posts/linux%E8%BE%BE%E4%BA%BA%E5%85%BB%E6%88%90/" title="Linux常用命令" target="_blank">Linux常用命令</a>
     </li>
     
@@ -535,8 +545,6 @@ div.highlight:hover .copy-code,pre:hover .copy-code {
     <a href="https://3zair.github.io/tags/go/">go</a>
     
     <a href="https://3zair.github.io/tags/linux/">linux</a>
-    
-    <a href="https://3zair.github.io/tags/redis/">redis</a>
     
     <a href="https://3zair.github.io/tags/shell/">shell</a>
     

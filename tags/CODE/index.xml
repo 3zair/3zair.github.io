@@ -23,7 +23,7 @@
       <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
       
       <guid>https://3zair.github.io/posts/%E7%BC%96%E5%86%99%E6%98%93%E8%AF%BB%E4%BB%A3%E7%A0%81/</guid>
-      <description>编写易读代码 态度 软件构建的核心就是管理复杂度 代码不仅写给自己看的 代码自解释 不要缩写 宁可名字很长，也要有意义 接口命名也需要自解释 1 2 3 4 5 6 7 8 9 10 11 12 13 14 //错误 var n int var nerr int var n_comp_conns int //正确 var errorNums int //错误 func Get(id int64) resp func List() []resp //正确 func GetById(id int64) func ListAllAlbums() []resp 命名 类型名或者变量名为名词 函数名一般为动词 形</description>
+      <description>&lt;p&gt;编写易读代码，炫技不可取，不费力能看懂最佳&lt;/p&gt;</description>
     </item>
     
   </channel>

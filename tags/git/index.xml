@@ -14,7 +14,7 @@
       <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
       
       <guid>https://3zair.github.io/posts/git-%E5%85%A5%E9%97%A8/</guid>
-      <description>创建分支 1 git checkout -b name //创建并切换分支到name分支 修改分支 假设分支名称为oldName 想要修改为 newName 1. 本地分支重命名(还没有推送到远程) 1 git branch -m oldName newName 2. 远程分支重命名 (已经推送远程-假设本地分支和远程对应分支名称相同) a. 重命名远程分支对应的本地分支 1 git branch -m oldName newName b. 删除远程分支 1 git push --delete origin</description>
+      <description>&lt;p&gt;Git常用的命令：创建分支、修改、合并、提交、历史&amp;hellip;&lt;/p&gt;</description>
     </item>
     
   </channel>
