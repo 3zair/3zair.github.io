@@ -9,8 +9,8 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>Hello | 3zair</title>
-    <meta property="og:title" content="Hello - 3zair">
+    <title>Go语言异常处理 | 3zair</title>
+    <meta property="og:title" content="Go语言异常处理 - 3zair">
     <meta property="og:type" content="article">
         
     <meta property="article:published_time" content='2021-06-03T21:04:49&#43;08:00'>
@@ -19,10 +19,10 @@
     <meta property="article:modified_time" content='2021-06-03T21:04:49&#43;08:00'>
         
     <meta name="Keywords" content="golang,go语言,博客,python,QT">
-    <meta name="description" content="Hello">
+    <meta name="description" content="Go语言异常处理">
         
     <meta name="author" content="3zair">
-    <meta property="og:url" content="https://3zair.github.io/posts/redis/">
+    <meta property="og:url" content="https://3zair.github.io/posts/go-%E8%AF%AD%E8%A8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
     <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
@@ -140,7 +140,17 @@
 <div class="post-toc" style="position: absolute; top: 188px;">
     <h2 class="post-toc-title">文章目录</h2>
     <div class="post-toc-content">
-        <nav id="TableOfContents"></nav>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#defer">defer</a></li>
+      </ul>
+    </li>
+    <li><a href="#painc">painc</a></li>
+    <li><a href="#recover">recover</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 <script type="text/javascript">
@@ -176,7 +186,7 @@
 </script>
     <article class="post">
         <header>
-            <h1 class="post-title">Hello</h1>
+            <h1 class="post-title">Go语言异常处理</h1>
         </header>
         
   <time datetime="2021-06-03T13:04:49Z" class="post-meta meta-date dt-published">
@@ -194,38 +204,69 @@
         
         
         <div class="post-content">
-            <h1 id="redis">redis:</h1>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0086b3">set</span> bar <span style="color:#099">1</span> <span style="color:#998;font-style:italic"># 建立bar的键</span>
-</span></span><span style="display:flex;"><span>keys * <span style="color:#998;font-style:italic"># 查看所有的键</span>
-</span></span><span style="display:flex;"><span>exists keyname <span style="color:#998;font-style:italic"># 查看键是否存在</span>
-</span></span><span style="display:flex;"><span>del key <span style="color:#998;font-style:italic"># 删除键</span>
-</span></span><span style="display:flex;"><span><span style="color:#0086b3">type</span> <span style="color:#998;font-style:italic"># 获取key的类型</span>
-</span></span><span style="display:flex;"><span>get key
-</span></span><span style="display:flex;"><span>mset		
-</span></span><span style="display:flex;"><span>hset
-</span></span><span style="display:flex;"><span>expire
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>缓存层 ：key value</p>
-<p>mmcahe： key value</p>
-<p>redis ：数据结构丰富</p>
-<p>过期时间：lru lfu 算法</p>
-<p>list 双向列表 push pop  lpush rpush&hellip;</p>
-<p>zset ：key（集合） value score（用作排序）</p>
-<p>分布式队列</p>
+            <p>Go语言追求简洁优雅，所以，Go语言不支持传统的 try…catch…finally 这种异常，因为Go语言的设计者们认为，将异常与控制结构混在一起会很容易使得代码变得混乱。因为开发者很容易滥用异常，甚至一个小小的错误都抛出一个异常。在Go语言中，使用多值返回来返回错误。不要用异常代替错误，更不要用来控制流程。在极个别的情况下，也就是说，遇到真正的异常的情况下（比如除数为0了）。才使用Go中引入的Exception处理：defer, panic, recover。</p>
+<p>这几个异常的使用场景可以这么简单描述：Go中可以抛出一个panic的异常，然后在defer中通过recover捕获这个异常，然后正常处理。</p>
+<p>例：</p>
+<pre tabindex="0"><code>package main
+
+import &#34;fmt&#34;
+
+func main(){
+	defer func(){		// 必须要先声明defer，否则不能捕获到panic异常
+		fmt.Println(&#34;c&#34;)
+
+		if err:=recover();err!=nil{
+			fmt.Println(err) 	// 这里的err其实就是panic传入的内容，55
+		}
+
+		fmt.Println(&#34;d&#34;)
+	}()
+
+	f()
+}
+
+func f(){
+	fmt.Println(&#34;a&#34;)
+	panic(55)
+	fmt.Println(&#34;b&#34;)
+	fmt.Println(&#34;f&#34;)
+}
+</code></pre><p>结果：
+a
+c
+55
+d
+exit code 0, process exited normally.
+参考： <a href="http://blog.csdn.net/ghost911_slb/article/details/7831574">http://blog.csdn.net/ghost911_slb/article/details/7831574</a></p>
+<h3 id="defer">defer</h3>
+<p>defer的思想类似于C++中的析构函数，不过Go语言中“析构”的不是对象，而是函数，defer就是用来添加函数结束时执行的语句。注意这里强调的是添加，而不是指定，因为不同于C++中的析构函数是静态的，Go中的defer是动态的。</p>
+<pre tabindex="0"><code>func f() (result int) {
+	defer func() {
+		result++
+	}()
+
+	return 0
+}
+</code></pre><p>上面函数返回1，因为defer中添加了一个函数，在函数返回前改变了命名返回值的值。是不是很好用呢。但是，要注意的是，如果我们的defer语句没有执行，那么defer的函数就不会添加，如果把上面的程序改成这样：</p>
+<pre tabindex="0"><code>func f() (result int) {
+ 	 return 0
+  
+  	defer func() {
+    		result++
+  	}()
+  
+ 	 return 0
+}
+</code></pre><p>上面的函数就返回0了，因为还没来得及添加defer的东西，函数就返回了。</p>
+<p>另外值得一提的是，defer可以多次，这样形成一个defer栈，后defer的语句在函数返回时将先被调用。</p>
+<h2 id="painc">painc</h2>
+<p>panic 是用来表示非常严重的不可恢复的错误的。在Go语言中这是一个内置函数，接收一个interface{}类型的值（也就是任何值了）作为参数。panic的作用就像我们平常接触的异常。不过Go可没有try…catch，所以，panic一般会导致程序挂掉（除非recover）。所以，Go语言中的异常，那真的是异常了。你可以试试，调用panic看看，程序立马挂掉，然后Go运行时会打印出调用栈。
+但是，关键的一点是，即使函数执行的时候panic了，函数不往下走了，运行时并不是立刻向上传递panic，而是到defer那，等defer的东西都跑完了，panic再向上传递。所以这时候 defer 有点类似 try-catch-finally 中的 finally。
+panic就是这么简单。抛出个真正意义上的异常。</p>
+<h2 id="recover">recover</h2>
+<p>上面说到，panic的函数并不会立刻返回，而是先defer，再返回。这时候（defer的时候），如果有办法将panic捕获到，并阻止panic传递，那就异常的处理机制就完善了。</p>
+<p>Go语言提供了recover内置函数，前面提到，一旦panic，逻辑就会走到defer那，那我们就在defer那等着，调用recover函数将会捕获到当前的panic（如果有的话），被捕获到的panic就不会向上传递了，于是，世界恢复了和平。你可以干你想干的事情了。</p>
+<p>不过要注意的是，recover之后，逻辑并不会恢复到panic那个点去，函数还是会在defer之后返回。</p>
 
         </div>
 
@@ -233,7 +274,7 @@
 <div class="post-archive">
     <ul class="post-copyright">
         <li><strong>Author: </strong><a rel="author" href="https://3zair.github.io/">3zair</a></li>
-        <li style="word-break:break-all"><strong>Link: </strong><a href="https://3zair.github.io/posts/redis/">https://3zair.github.io/posts/redis/</a></li>
+        <li style="word-break:break-all"><strong>Link: </strong><a href="https://3zair.github.io/posts/go-%E8%AF%AD%E8%A8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">https://3zair.github.io/posts/go-%E8%AF%AD%E8%A8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</a></li>
         <li><strong>License: </strong>This work is under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>. Kindly fulfill the requirements of the aforementioned License when adapting or creating a derivative of this work.</li>
     </ul>
 </div>
@@ -249,11 +290,11 @@
         
         <li><a href="/posts/Golang%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/">GO开发规范-参考</a></li>
         
+        <li><a href="/posts/Go%E8%BF%9B%E9%98%B6/">Go进阶</a></li>
+        
         <li><a href="/posts/git-%E5%85%A5%E9%97%A8/">Git常用命令</a></li>
         
-        <li><a href="/posts/go-%E8%AF%AD%E8%A8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">Go语言异常处理</a></li>
-        
-        <li><a href="/posts/Go%E8%BF%9B%E9%98%B6/">Go进阶</a></li>
+        <li><a href="/posts/redis/">Hello</a></li>
         
         <li><a href="/posts/linux%E8%BE%BE%E4%BA%BA%E5%85%BB%E6%88%90/">Linux常用命令</a></li>
         
@@ -265,7 +306,7 @@
             
             <ul class="clearfix">
                 
-                <li><a href='/tags/redis' target="_blank">redis</a></li>
+                <li><a href='/tags/go' target="_blank">go</a></li>
                 
             </ul>
             

@@ -9,21 +9,20 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>Categories | 3zair</title>
-    <meta property="og:title" content="Categories - 3zair">
+    <title>搜索 | 3zair</title>
+    <meta property="og:title" content="搜索 - 3zair">
     <meta property="og:type" content="article">
         
         
     <meta name="Keywords" content="golang,go语言,博客,python,QT">
-    <meta name="description" content="Categories">
+    <meta name="description" content="搜索页面">
         
     <meta name="author" content="3zair">
-    <meta property="og:url" content="https://3zair.github.io/categories/">
+    <meta property="og:url" content="https://3zair.github.io/search/">
     <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
     <link rel="stylesheet" href='/css/style.css'>
-    <link rel="alternate" type="application/rss+xml" href="https://3zair.github.io/categories/index.xml" title="3zair" />
     <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     
@@ -71,29 +70,70 @@
             <div class="col-group">
 
                 <div class="col-8" id="main">
-                    
-<header>
-    
-    <h1>共有1个分类</h1>
-    
-</header>
-<div class="post-archive">
-    
-    <h2>
-        <a href="https://3zair.github.io/categories/Go%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7" target="_blank">Go使用技巧</a>
-        (1)
-    </h2>
-    <ul class="listing">
+                    <div class="res-cons">
+    <h3 class="archive-title">
+        Search: 
+        <span class="keyword">Keyword</span>
+        results
+    </h3>
+
+    <article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="链接" target="_blank">标题</a>
+            </h1>
+        </header>
         
-        <li>
-            <span class="date">2021/06/03</span>
-            <a href="https://3zair.github.io/posts/Go%E8%BF%9B%E9%98%B6/" title="Go进阶" target="_blank">Go进阶</a>
-        </li>
-        
-    </ul>
-    
+        <div class="post-content">
+            概要……
+            <p class="readmore"><a href="链接" target="_blank">阅读全文</a></p>
+        </div>
+    </article>
 
 </div>
+
+<script type="text/javascript">
+
+    var getUrlParameter = function getUrlParameter (sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+    };
+
+    $(document).ready(function () {
+        var q = getUrlParameter("q");
+        $("span.keyword").text(q);
+        $("article.post").remove();
+        $.ajax({
+            url: 'https:\/\/3zair.github.io\/index.xml',
+            dataType: "xml",
+            success: function (data) {
+                $(data).find("item").each(function () {
+                    var item = $(this);
+                    var title = item.find("title").text();
+                    if (title.toLowerCase().indexOf(q.toLowerCase()) >= 0) {
+                        var url = item.find("link").text();
+                        var searchItem = `<article class="post"><header><h1 class="post-title"><a href="` + url + `" target="_blank">` + title + `</a></h1></header>`;
+                        var pubDate = new Date(item.find("pubDate").text())
+                        searchItem += `<time class="post-meta meta-date">` + pubDate.getFullYear() + `-` + (pubDate.getMonth() + 1) + `-` + pubDate.getDate() + `</time>`;
+                        searchItem += `<div class="post-content">` + item.find("description").text() + `……<p class="readmore"><a href="` + url + `" target="_blank">"阅读全文"</a></p></div></article>`;
+
+                        $("div.res-cons").append(searchItem);
+                    }
+                });
+            }
+        });
+    });
+</script>
 
                     <footer id="footer">
     <div>
@@ -115,6 +155,17 @@
 </footer>
 
 
+    
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script><script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
 <a id="rocket" href="#top"></a>
 <script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>

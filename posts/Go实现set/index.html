@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>集合Set实现-Go语言 | 3zair</title>
+    <meta property="og:title" content="集合Set实现-Go语言 - 3zair">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2021-06-03T21:04:49&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2021-06-03T21:04:49&#43;08:00'>
+        
+    <meta name="Keywords" content="golang,go语言,博客,python,QT">
+    <meta name="description" content="集合Set实现-Go语言">
+        
+    <meta name="author" content="3zair">
+    <meta property="og:url" content="https://3zair.github.io/posts/Go%E5%AE%9E%E7%8E%B0set/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+        <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet">
+    
+    
+    
+    
+        <link rel="stylesheet" href='/css/douban.css'>
+    
+        <link rel="stylesheet" href='/css/other.css'>
+    
+</head>
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://3zair.github.io/">
+                        3zair
+                    </a>
+                
+                <p class="description">追梦的蚂蚁</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://3zair.github.io/">首页</a>
+                    
+                    <a  href="https://3zair.github.io/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://3zair.github.io/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#基本定义"><strong>基本定义</strong></a></li>
+    <li><a href="#2基本功能"><strong>2.基本功能</strong></a>
+      <ul>
+        <li><a href="#1添加元素值"><strong>(1).添加元素值</strong></a></li>
+        <li><a href="#2删除元素值"><strong>(2).删除元素值</strong></a></li>
+        <li><a href="#3清除所有元素"><strong>(3).清除所有元素</strong></a></li>
+        <li><a href="#4判断是否包含某个元素值"><strong>(4).判断是否包含某个元素值。</strong></a></li>
+        <li><a href="#5获取元素值的数量"><strong>(5).获取元素值的数量。</strong></a></li>
+        <li><a href="#6判断与其他hashset类型值是否相同"><strong>(6).判断与其他HashSet类型值是否相同。</strong></a></li>
+        <li><a href="#7获取所有元素值即生成可迭代的快照"><strong>(7).获取所有元素值，即生成可迭代的快照。</strong></a></li>
+        <li><a href="#8获取自身的字符串表示形式"><strong>(8).获取自身的字符串表示形式。</strong></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if (leftPos < 220) {
+                postToc.css({ "width": leftPos - 10, "margin-left": (0 - leftPos) })
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+
+        if ($("#TableOfContents").children().length < 1) {
+            $(".post-toc").remove();
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">集合Set实现-Go语言</h1>
+        </header>
+        
+  <time datetime="2021-06-03T13:04:49Z" class="post-meta meta-date dt-published">
+    2021-06-03
+  </time>
+
+
+
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span>reads</span>
+            </span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h1 id="set实现">Set实现</h1>
+<p><strong>练习利用go语言的标准数据类型map实现python语言中的set数据结构</strong></p>
+<p>其他语言中，set的底层都是由哈希表(Hash Table)来实现的，go语言拥有作为Hash Table实现的字典Map类型。我们在对Set和Map进行比较之后会发现他们在一些主要特性上是及其相似的如下：</p>
+<ul>
+<li>他们中的元素都是不可重复的。</li>
+<li>他们都只能用迭代的方式取出其中的所有元素。</li>
+<li>对他们中的元素进行迭代的顺序都是与元素插入顺序无关的，同时也不保证任何有序性，虽然有一些区别。</li>
+<li>Set的元素是一个单一的值，而map的元素则是一个键值对。</li>
+<li>Set的元素不可重复指的是不能存在任意两个单一值相等的情况。map的元素不可重复指的是任意两个键值对中的键的值不能相等。</li>
+</ul>
+<p>我们可以发现Set更像是Map的一种简化版本，我们可不可以利用Map来编写一个Set的实现呢？答案当然是肯定的。</p>
+<h2 id="基本定义"><strong>基本定义</strong></h2>
+<p>​    首先，我们创建一个名为hash_set.go的源码文件，把它放在项目的代码包set中。我们需要首先在这个源码文件的第一行上写入这样一行代码：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">package</span> set
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​     这是为了声明源码文件hash_set.go是代码包set中的一员。然后我们声明一个包含了一个字典类型的字段的结构体类型。声明如下：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">type</span> HashSet <span style="color:#000;font-weight:bold">struct</span> {
+</span></span><span style="display:flex;"><span>    m <span style="color:#000;font-weight:bold">map</span>[<span style="color:#000;font-weight:bold">interface</span>{}]<span style="color:#458;font-weight:bold">bool</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​    这个类型声明中的唯一的字段是map[interface{}]bool。之所以选择这样的一个字典类型是有原因的。因为我们希望HashSet类型的元素可以是任意类型的，所以我们将字典m的键类型设置为了interface{}。又由于我们只需要用到m的值中的键来储存HashSet类型的元素值，所以就应该选用值占用空间最小的类型来作为m的值的元素类型，这里使用bool类型有3个好处：</p>
+<ul>
+<li>从值的储存形式的角度看，bool类型值的占用空间是最小的之一，只占用一个字节。</li>
+<li>从值的表示形式的角度看，bool类型的值只有两个，这两个值都是预定义常量。</li>
+<li>把bool类型作为值类型更有利于判断字典类型中是否存在某个键。例如，我们可以用m[&ldquo;a&rdquo;]的结果值体现m的值中是否包含键为&quot;a&quot;键值对，但是，如果m的类型是map[interface{}]byte的话，那么我们只有通过v, ok := m[&ldquo;a&rdquo;],才能确切得出上述判断的结果。虽然在向map[interface{}]byte类型的m的值添加键值对的时候，我们可以总以非零值的byte类型值作为其中的元素的值，但是我们在做判断的时候就需要编写更多的代码：</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">if</span> v <span style="color:#000;font-weight:bold">:=</span> m[<span style="color:#d14">&#34;a&#34;</span>]; v <span style="color:#000;font-weight:bold">!=</span> <span style="color:#099">0</span> { <span style="color:#998;font-style:italic">//如果“m“中不存在以”&#34;a&#34;作为键的键值对
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">//省略若干语句
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>}
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">//对于map[interface{}]bool类型的值来说
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">if</span> m[<span style="color:#d14">&#34;a&#34;</span>]{<span style="color:#998;font-style:italic">//如果“m“中不存在以”&#34;a&#34;作为键的键值对
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">//省略若干语句
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来我们考虑初始化HashSet类型值的问题。由于字典类型的零值为nil，所以我们不能简单使用new函数来创建一个HashSet类型值，因为 **new(HashSet).m **的求值结果将会是一个 **nil **。因此，这里需要编写一个专门用于创建和初始化 **HashSet **类型值的函数，该函数声明如下：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">NewHashSet</span>() <span style="color:#000;font-weight:bold">*</span>HashSet {
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">&amp;</span>HashSet{m: <span style="color:#0086b3">make</span>(<span style="color:#000;font-weight:bold">map</span>[<span style="color:#000;font-weight:bold">interface</span>{}]<span style="color:#458;font-weight:bold">bool</span>)}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如上可以看到，使用<strong>make</strong>函数对字段m进行了初始化。同时注意观察函数 **NewHashSet **的结果声明的类型是 *HashSet 而不是 HashSet，目的是让这个结果值的方法集合中包含调用接收者类型为 **HashSet **或 *HashSet 的所有方法。这样做的好处将在后面编写 **Set **接口类型的时候再予以说明。</p>
+<h2 id="2基本功能"><strong>2.基本功能</strong></h2>
+<p>依据其他编程语言中的 **HashSet **类型可知，它们大部分应该提供的基本功能如下：</p>
+<ul>
+<li>添加元素值。</li>
+<li>删除元素值。</li>
+<li>清除所有元素值。</li>
+<li>判断是否包含某个元素值。</li>
+<li>获取元素值的数量。</li>
+<li>判断与其他HashSet类型值是否相同。</li>
+<li>获取所有元素值，即生成可迭代的快照。</li>
+<li>获取自身的字符串表示形式。</li>
+</ul>
+<h3 id="1添加元素值"><strong>(1).添加元素值</strong></h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#998;font-style:italic">//方法Add会返回一个bool类型的结果值，以表示添加元素值的操作是否成功。
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">//方法Add的声明中的接收者类型是*HashSet。
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">func</span> (set <span style="color:#000;font-weight:bold">*</span>HashSet) <span style="color:#900;font-weight:bold">Add</span>(e <span style="color:#000;font-weight:bold">interface</span>{}) <span style="color:#458;font-weight:bold">bool</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">if</span> !set.m[e] {<span style="color:#998;font-style:italic">//当前的m的值中还未包含以e的值为键的键值对
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    set.m[e] = <span style="color:#000;font-weight:bold">true</span><span style="color:#998;font-style:italic">//将键为e(代表的值)、元素为true的键值对添加到m的值当中
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">true</span> <span style="color:#998;font-style:italic">//添加成功
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span> <span style="color:#998;font-style:italic">//添加失败
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里使用 ***HashSet **而不是 <strong>HashSet</strong>，主要是从节约内存空间的角度出发，分析如下：</p>
+<p>当 **Add **方法的接收者类型为 **HashSet **的时候，对它的每一次调用都需要对当前 **HashSet **类型值进行一次复制。虽然在 **HashSet **类型中只有一个引用类型的字段，但是这也是一种开销。而且这里还没有考虑 **HashSet **类型中的字段可能会变得更多的情况。</p>
+<p>当 **Add **方法的接收者类型为 ***HashSet **的时候，对它进行调用时复制的当前 ***HashSet **的类型值只是一个指针值。在大多数情况下，一个指针值占用的内存空间总会被它指向的那个其他类型的值所占用的内存空间小。无论一个指针值指向的那个其他类型值所需的内存空间有多么大，它所占用的内存空间总是不变的。</p>
+<h3 id="2删除元素值"><strong>(2).删除元素值</strong></h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#998;font-style:italic">//调用delete内建函数删除HashSet内部支持的字典值
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">func</span> (set <span style="color:#000;font-weight:bold">*</span>HashSet) <span style="color:#900;font-weight:bold">Remove</span>(e <span style="color:#000;font-weight:bold">interface</span>{}) {
+</span></span><span style="display:flex;"><span>  <span style="color:#0086b3">delete</span>(set.m, e)<span style="color:#998;font-style:italic">//第一个参数为目标字典类型，第二个参数为要删除的那个键值对的键
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3清除所有元素"><strong>(3).清除所有元素</strong></h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#998;font-style:italic">//为HashSet中的字段m重新赋值
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">func</span> (set <span style="color:#000;font-weight:bold">*</span>HashSet) <span style="color:#900;font-weight:bold">Clear</span>() {
+</span></span><span style="display:flex;"><span>  set.m = <span style="color:#0086b3">make</span>(<span style="color:#000;font-weight:bold">map</span>[<span style="color:#000;font-weight:bold">interface</span>{}]<span style="color:#458;font-weight:bold">bool</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果接收者类型是 <strong>HashSet</strong>，该方法中的赋值语句的作用只是为当前值的某个复制品中的字段m赋值而已，而当前值中的字段 m 则不会被重新赋值。方法 **Clear **中的这条赋值语句被执行之后，当前的 **HashSet **类型值中的元素就相当于被清空了。已经与字段 m 解除绑定的那个旧的字典值由于不再与任何程序实体存在绑定关系而成为了无用的数据。它会在之后的某一时刻被Go语言的垃圾回收器发现并回收。</p>
+<h3 id="4判断是否包含某个元素值"><strong>(4).判断是否包含某个元素值。</strong></h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#998;font-style:italic">//方法Contains用于判断其值是否包含某个元素值。
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">//这里判断结果得益于元素类型为bool的字段m
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">func</span> (set <span style="color:#000;font-weight:bold">*</span>HashSet) <span style="color:#900;font-weight:bold">Contains</span>(e <span style="color:#000;font-weight:bold">interface</span>{}) <span style="color:#458;font-weight:bold">bool</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">return</span> set.m[e]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>当把一个 interface{} 类型值作为键添加到一个字典值的时候，Go语言会先获取这个 interface{} 类型值的实际类型（即动态类型），然后再使用与之对应的 **hash **函数对该值进行 **hash **运算，也就是说，interface{} 类型值总是能够被正确地计算出 **hash **值。但是字典类型的键不能是函数类型、字典类型或切片类型，否则会引发一个运行时恐慌，并提示如下： </p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>panic: runtime <span style="color:#458;font-weight:bold">error</span>: hash of unhashable <span style="color:#000;font-weight:bold">type</span> &lt;<span style="color:#a61717;background-color:#e3d2d2">某个函数类型、字典类型或切片类型的名称</span>&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="5获取元素值的数量"><strong>(5).获取元素值的数量。</strong></h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#998;font-style:italic">//方法Len用于获取HashSet元素值数量
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">func</span> (set <span style="color:#000;font-weight:bold">*</span>HashSet) <span style="color:#900;font-weight:bold">Len</span>() <span style="color:#458;font-weight:bold">int</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">len</span>(set.m)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="6判断与其他hashset类型值是否相同"><strong>(6).判断与其他HashSet类型值是否相同。</strong></h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#998;font-style:italic">//方法Same用来判断两个HashSet类型值是否相同
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">func</span> (set <span style="color:#000;font-weight:bold">*</span>HashSet) <span style="color:#900;font-weight:bold">Same</span>(other <span style="color:#000;font-weight:bold">*</span>HashSet) <span style="color:#458;font-weight:bold">bool</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">if</span> other <span style="color:#000;font-weight:bold">==</span> <span style="color:#000;font-weight:bold">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">if</span> set.<span style="color:#900;font-weight:bold">Len</span>() <span style="color:#000;font-weight:bold">!=</span> other.<span style="color:#900;font-weight:bold">Len</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">for</span> key <span style="color:#000;font-weight:bold">:=</span> <span style="color:#000;font-weight:bold">range</span> set.m {
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> !other.<span style="color:#900;font-weight:bold">Contains</span>(key) {
+</span></span><span style="display:flex;"><span>      <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>两个 **HashSet **类型值相同的必要条件是，它们包含的元素应该是完全相同的。由于 **HashSet **类型值中的元素的迭代顺序总是不确定的，所以也就不用在意两个值在这方面是否一致。如果要判断两个 **HashSet **类型值是否是同一个值，就需要利用指针运算进行内存地址的比较。</p>
+<h3 id="7获取所有元素值即生成可迭代的快照"><strong>(7).获取所有元素值，即生成可迭代的快照。</strong></h3>
+<p>所谓 快照，就是目标值在某一个时刻的映像。对于一个 **HashSet **类型值来说，它的快照中的元素迭代顺序总是可以确定的，快照只反映了该 **HashSet **类型值在某一个时刻的状态。另外，还需要从元素可迭代且顺序可确定的数据类型中选取一个作为快照的类型。这个类型必须是以单值作为元素的，所以字典类型最先别排除。又由于 **HashSet **类型值中的元素数量总是不固定的，所以无法用一个数组类型的值来表示它的快照。如上分析可知，Go语言中可以使用的快照的类型应该是一个切片类型或者通道类型。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#998;font-style:italic">//方法Elements用于生成快照
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">func</span> (set <span style="color:#000;font-weight:bold">*</span>HashSet) <span style="color:#900;font-weight:bold">Elements</span>() []<span style="color:#000;font-weight:bold">interface</span>{} {
+</span></span><span style="display:flex;"><span>  initialLen <span style="color:#000;font-weight:bold">:=</span> <span style="color:#0086b3">len</span>(set.m)
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">//初始化一个[]interface{}类型的变量snapshot来存储m的值中的元素值
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  snapshot <span style="color:#000;font-weight:bold">:=</span> <span style="color:#0086b3">make</span>([]<span style="color:#000;font-weight:bold">interface</span>{}, initialLen)
+</span></span><span style="display:flex;"><span>  actualLen <span style="color:#000;font-weight:bold">:=</span> <span style="color:#099">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">//按照既定顺序将迭代值设置到快照值(变量snapshot的值)的指定元素位置上,这一过程并不会创建任何新值。
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#000;font-weight:bold">for</span> key <span style="color:#000;font-weight:bold">:=</span> <span style="color:#000;font-weight:bold">range</span> set.m {
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> actualLen &lt; initialLen {
+</span></span><span style="display:flex;"><span>      snapshot[actualLen] = key
+</span></span><span style="display:flex;"><span>    } <span style="color:#000;font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>      snapshot = <span style="color:#0086b3">append</span>(snapshot, key)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    actualLen<span style="color:#000;font-weight:bold">++</span><span style="color:#998;font-style:italic">//实际迭代的次数
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  }
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">if</span> actualLen &lt; initialLen {
+</span></span><span style="display:flex;"><span>    snapshot = snapshot[:actualLen]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">return</span> snapshot
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>之所以我们使用这么多条语句来实现这个方法是因为需要考虑到在从获取字段m的值的长度到对m的值迭代完成的这个时间段内，m的值中的元素数量可能发生变化。如果在迭代完成之前，m的值中的元素数量有所增加，使得实际迭代的次数大于先前初始化的快照值的长度 ，那么我们再使用appeng函数向快照值追加元素值。这样做既提高了快照生成的效率，又不至于在元素数量增加时引发索引越界的运行时恐慌。</p>
+<p>对于已被初始化的[]interface{}类型的切片值来说，未被显示初始化的元素位置上的值均为nil。如果在迭代完成前，m的值中的元素数量有所减少， 致使快照值的尾部存在若干个没有任何意义的值为nil的元素，我们需要把这些无用的元素从快照中去掉。可以通过snapshot = snapshot[:actualLen]将无用的元素值从快照值中去掉。</p>
+<p>**注意：**在 **Elements **方法中针对并发访问和修改 m 的值的情况采取了一些措施。但是由于m的值本身并不是并发安全的，所以并不能保证 **Elements **方法的执行总会准确无误。要做到真正的并发安全，还需要一些辅助的手段，比如读写互斥量。</p>
+<h3 id="8获取自身的字符串表示形式"><strong>(8).获取自身的字符串表示形式。</strong></h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#998;font-style:italic">//这个String方法的签名算是一个惯用法。 
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">//代码包fmt中的打印函数总会使用参数值附带的具有如此签名的String方法的结果值作为该参数值的字符串表示形式。
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">func</span> (set <span style="color:#000;font-weight:bold">*</span>HashSet) <span style="color:#900;font-weight:bold">String</span>() <span style="color:#458;font-weight:bold">string</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">var</span> buf bytes.Buffer<span style="color:#998;font-style:italic">//作为结果值的缓冲区
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  buf.<span style="color:#900;font-weight:bold">WriteString</span>(<span style="color:#d14">&#34;HashSet{&#34;</span>)
+</span></span><span style="display:flex;"><span>  first <span style="color:#000;font-weight:bold">:=</span> <span style="color:#000;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">for</span> key <span style="color:#000;font-weight:bold">:=</span> <span style="color:#000;font-weight:bold">range</span> set.m {
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> first {
+</span></span><span style="display:flex;"><span>      first = <span style="color:#000;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>    } <span style="color:#000;font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>      buf.<span style="color:#900;font-weight:bold">WriteString</span>(<span style="color:#d14">&#34;,&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    buf.<span style="color:#900;font-weight:bold">WriteString</span>(fmt.<span style="color:#900;font-weight:bold">Sprintf</span>(<span style="color:#d14">&#34;%v&#34;</span>, key))
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic">//n := 1
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">//for key := range set.m {
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">// buf.WriteString(fmt.Sprintf(&#34;%v&#34;, key))
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">// if n == len(set.m) {//最后一个元素的后面不添加逗号
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">// break;
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">// } else {
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">// buf.WriteString(&#34;,&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">// }
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">// n++;
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">//}
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>  buf.<span style="color:#900;font-weight:bold">WriteString</span>(<span style="color:#d14">&#34;}&#34;</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">return</span> buf.Strin
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如上已经完整地编写了一个具备常用功能的Set的实现类型，后面将讲解更多的高级功能来完善它。</p>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>Author: </strong><a rel="author" href="https://3zair.github.io/">3zair</a></li>
+        <li style="word-break:break-all"><strong>Link: </strong><a href="https://3zair.github.io/posts/Go%E5%AE%9E%E7%8E%B0set/">https://3zair.github.io/posts/Go%E5%AE%9E%E7%8E%B0set/</a></li>
+        <li><strong>License: </strong>This work is under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>. Kindly fulfill the requirements of the aforementioned License when adapting or creating a derivative of this work.</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/posts/Golang%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/">GO开发规范-参考</a></li>
+        
+        <li><a href="/posts/git-%E5%85%A5%E9%97%A8/">Git常用命令</a></li>
+        
+        <li><a href="/posts/go-%E8%AF%AD%E8%A8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">Go语言异常处理</a></li>
+        
+        <li><a href="/posts/Go%E8%BF%9B%E9%98%B6/">Go进阶</a></li>
+        
+        <li><a href="/posts/redis/">Hello</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            No tags
+            
+        </div>
+    </article>
+    
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yourdiscussshortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+    
+    
+    
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2023 <a href="https://3zair.github.io/">3zair By 3zair</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script><script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+<style type="text/css">
+div.highlight {
+    position: relative;
+    margin: 1em 0px;
+}
+
+.copy-code {
+    display: none;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(78, 78, 78, 0.8);
+    border-radius: var(--radius);
+    padding: 0 5px;
+    font: inherit;
+    user-select: none;
+    cursor: pointer;
+    border: 0;
+    --radius: 8px;
+}
+
+div.highlight:hover .copy-code,pre:hover .copy-code {
+    display: block;
+}
+
+</style>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+    <script src='/js/douban.js'></script>
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://3zair.github.io/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://3zair.github.io/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://3zair.github.io/posts/git-%E5%85%A5%E9%97%A8/" title="Git常用命令" target="_blank">Git常用命令</a>
+    </li>
+    
+    <li>
+        <a href="https://3zair.github.io/posts/Golang%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/" title="GO开发规范-参考" target="_blank">GO开发规范-参考</a>
+    </li>
+    
+    <li>
+        <a href="https://3zair.github.io/posts/go-%E8%AF%AD%E8%A8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="Go语言异常处理" target="_blank">Go语言异常处理</a>
+    </li>
+    
+    <li>
+        <a href="https://3zair.github.io/posts/Go%E8%BF%9B%E9%98%B6/" title="Go进阶" target="_blank">Go进阶</a>
+    </li>
+    
+    <li>
+        <a href="https://3zair.github.io/posts/redis/" title="Hello" target="_blank">Hello</a>
+    </li>
+    
+    <li>
+        <a href="https://3zair.github.io/posts/linux%E8%BE%BE%E4%BA%BA%E5%85%BB%E6%88%90/" title="Linux常用命令" target="_blank">Linux常用命令</a>
+    </li>
+    
+    <li>
+        <a href="https://3zair.github.io/posts/ubuntu18.04%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" title="Ubuntu 18.04采坑" target="_blank">Ubuntu 18.04采坑</a>
+    </li>
+    
+    <li>
+        <a href="https://3zair.github.io/posts/%E7%BC%96%E5%86%99%E6%98%93%E8%AF%BB%E4%BB%A3%E7%A0%81/" title="编写易读代码" target="_blank">编写易读代码</a>
+    </li>
+    
+    <li>
+        <a href="https://3zair.github.io/posts/Go%E5%AE%9E%E7%8E%B0set/" title="集合Set实现-Go语言" target="_blank">集合Set实现-Go语言</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://3zair.github.io/categories/Go%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/">Go使用技巧 (1)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://3zair.github.io/tags/CODE/">CODE</a>
+    
+    <a href="https://3zair.github.io/tags/git/">git</a>
+    
+    <a href="https://3zair.github.io/tags/go/">go</a>
+    
+    <a href="https://3zair.github.io/tags/linux/">linux</a>
+    
+    <a href="https://3zair.github.io/tags/redis/">redis</a>
+    
+    <a href="https://3zair.github.io/tags/shell/">shell</a>
+    
+    <a href="https://3zair.github.io/tags/ubuntu/">ubuntu</a>
+    
+</div>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title">Meta</h3>
+        <ul class="widget-list">
+            <li><a href="https://3zair.github.io/index.xml">RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

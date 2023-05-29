@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on 3zair</title>
+    <link>https://3zair.github.io/tags/linux/</link>
+    <description>Recent content in linux on 3zair</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
+    <lastBuildDate>Thu, 03 Jun 2021 21:04:49 +0800</lastBuildDate><atom:link href="https://3zair.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux常用命令</title>
+      <link>https://3zair.github.io/posts/linux%E8%BE%BE%E4%BA%BA%E5%85%BB%E6%88%90/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/posts/linux%E8%BE%BE%E4%BA%BA%E5%85%BB%E6%88%90/</guid>
+      <description>软硬链接： 硬链接：i节点相同， 实际是同一个文件，删除其中一个不影响两外一个，不能跨分区，不能针对目录使用 1 ln xxx aaa 软连接：删除链接不影响源文件，删除原文件不能通过链接访问文件，类似于win快捷方式， 做软连接 源文件地址必须是绝对路径，不写绝对路径默认是别的的是软连接所在目录 1 ln -s xxx aaa</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu 18.04采坑</title>
+      <link>https://3zair.github.io/posts/ubuntu18.04%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/posts/ubuntu18.04%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</guid>
+      <description>设置软件开机启动 ubuntu18.04不再使用initd管理系统，改用systemd。 使用systemd设置开机启动,为了像以前一样，在/etc/rc.local中设置开机启动程序，需要以下几步： systemd默认读取/etc/systemd/system下的配置文件，该目录下的</description>
+    </item>
+    
+  </channel>
+</rss>

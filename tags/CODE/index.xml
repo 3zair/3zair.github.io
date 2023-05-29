@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CODE on 3zair</title>
+    <link>https://3zair.github.io/tags/CODE/</link>
+    <description>Recent content in CODE on 3zair</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
+    <lastBuildDate>Thu, 03 Jun 2021 21:04:49 +0800</lastBuildDate><atom:link href="https://3zair.github.io/tags/CODE/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GO开发规范-参考</title>
+      <link>https://3zair.github.io/posts/Golang%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/posts/Golang%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</guid>
+      <description>Go项目开发规范 命名规范 需要注释来补充的命名就不算是好命名。 使用可搜索的名称：单字母名称和数字常量很难从一大堆文字中搜索出来。单字母名称仅适用于短方法中的本地变量，名称长短应与其作用域相对应。若变量或常量可能在代码中多处使用，则应赋其以便于搜索的名称。 做有意义的区分：Produc</description>
+    </item>
+    
+    <item>
+      <title>编写易读代码</title>
+      <link>https://3zair.github.io/posts/%E7%BC%96%E5%86%99%E6%98%93%E8%AF%BB%E4%BB%A3%E7%A0%81/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/posts/%E7%BC%96%E5%86%99%E6%98%93%E8%AF%BB%E4%BB%A3%E7%A0%81/</guid>
+      <description>编写易读代码 态度 软件构建的核心就是管理复杂度 代码不仅写给自己看的 代码自解释 不要缩写 宁可名字很长，也要有意义 接口命名也需要自解释 1 2 3 4 5 6 7 8 9 10 11 12 13 14 //错误 var n int var nerr int var n_comp_conns int //正确 var errorNums int //错误 func Get(id int64) resp func List() []resp //正确 func GetById(id int64) func ListAllAlbums() []resp 命名 类型名或者变量名为名词 函数名一般为动词 形</description>
+    </item>
+    
+  </channel>
+</rss>

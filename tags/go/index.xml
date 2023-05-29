@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>go on 3zair</title>
+    <link>https://3zair.github.io/tags/go/</link>
+    <description>Recent content in go on 3zair</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
+    <lastBuildDate>Thu, 03 Jun 2021 21:04:49 +0800</lastBuildDate><atom:link href="https://3zair.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GO开发规范-参考</title>
+      <link>https://3zair.github.io/posts/Golang%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/posts/Golang%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</guid>
+      <description>Go项目开发规范 命名规范 需要注释来补充的命名就不算是好命名。 使用可搜索的名称：单字母名称和数字常量很难从一大堆文字中搜索出来。单字母名称仅适用于短方法中的本地变量，名称长短应与其作用域相对应。若变量或常量可能在代码中多处使用，则应赋其以便于搜索的名称。 做有意义的区分：Produc</description>
+    </item>
+    
+    <item>
+      <title>Go语言异常处理</title>
+      <link>https://3zair.github.io/posts/go-%E8%AF%AD%E8%A8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/posts/go-%E8%AF%AD%E8%A8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</guid>
+      <description>Go语言追求简洁优雅，所以，Go语言不支持传统的 try…catch…finally 这种异常，因为Go语言的设计者们认为，将异常与控制结构混在一起会很容易使得代码变得混乱。因为开发者很容易滥用异常，甚至一个小小的错误都抛出一个异常。在Go语言中，使用多值返回来返回错误。不要用异常代</description>
+    </item>
+    
+    <item>
+      <title>Go进阶</title>
+      <link>https://3zair.github.io/posts/Go%E8%BF%9B%E9%98%B6/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/posts/Go%E8%BF%9B%E9%98%B6/</guid>
+      <description>&lt;p&gt;执行顺序、断言问题、map复制&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

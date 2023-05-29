@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>redis on 3zair</title>
+    <link>https://3zair.github.io/tags/redis/</link>
+    <description>Recent content in redis on 3zair</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
+    <lastBuildDate>Thu, 03 Jun 2021 21:04:49 +0800</lastBuildDate><atom:link href="https://3zair.github.io/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hello</title>
+      <link>https://3zair.github.io/posts/redis/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/posts/redis/</guid>
+      <description>redis: 1 2 3 4 5 6 7 8 9 set bar 1 # 建立bar的键 keys * # 查看所有的键 exists keyname # 查看键是否存在 del key # 删除键 type # 获取key的类型 get key mset hset expire 缓存层 ：key value mmcahe： key value redis ：数据结构丰富 过期时间：lru lfu 算法 list 双向列表 push pop lpush rpush&amp;hellip; zset ：key（集合） value score（用作排序） 分布式队列</description>
+    </item>
+    
+  </channel>
+</rss>

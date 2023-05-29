@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on 3zair</title>
+    <link>https://3zair.github.io/tags/</link>
+    <description>Recent content in Tags on 3zair</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
+    <lastBuildDate>Thu, 03 Jun 2021 21:04:49 +0800</lastBuildDate><atom:link href="https://3zair.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CODE</title>
+      <link>https://3zair.github.io/tags/CODE/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/tags/CODE/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>git</title>
+      <link>https://3zair.github.io/tags/git/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/tags/git/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>go</title>
+      <link>https://3zair.github.io/tags/go/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>https://3zair.github.io/tags/linux/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>redis</title>
+      <link>https://3zair.github.io/tags/redis/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/tags/redis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shell</title>
+      <link>https://3zair.github.io/tags/shell/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/tags/shell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ubuntu</title>
+      <link>https://3zair.github.io/tags/ubuntu/</link>
+      <pubDate>Thu, 03 Jun 2021 21:04:49 +0800</pubDate>
+      
+      <guid>https://3zair.github.io/tags/ubuntu/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
